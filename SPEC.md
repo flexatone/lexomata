@@ -109,7 +109,7 @@ export type GridSnapshot = {
 
 export type SimulationConfig = {
   gridSize: number
-  llmModel: string
+  llmModel: string  // default to gpt-5-nano
   llmTemperature: number
   initialState: 'random' | 'center-excited' | 'all-calm' | 'custom'
   customInitialGrid?: CellState[][]
@@ -479,9 +479,11 @@ Response:
 
 ### Environment Variables
 
+
+
+
 ```
 OPENAI_API_KEY=...
-DEFAULT_MODEL=gpt-5-nano
 ```
 
 ### Dependencies
