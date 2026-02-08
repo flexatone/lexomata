@@ -1,0 +1,98 @@
+{
+  "title": "Example Waves",
+  "description": "A small 5x5 demo showing wave-like patterns emerging from a random initial state",
+  "config": {
+    "gridSize": 5,
+    "llmModel": "gpt-4.1-nano",
+    "llmTemperature": 0.7,
+    "initialState": "random"
+  },
+  "history": [
+    {
+      "tick": 0,
+      "cells": [
+        [
+          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "excited", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "dormant", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."}
+        ],
+        [
+          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "excited", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "dormant", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."}
+        ],
+        [
+          {"state": "dormant", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "excited", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."}
+        ],
+        [
+          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "dormant", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "excited", "proposal": "calm", "reasoning": "Initial state."}
+        ],
+        [
+          {"state": "excited", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "dormant", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."},
+          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."}
+        ]
+      ],
+      "globalStats": {"dormant": 16, "calm": 40, "engaged": 24, "excited": 20}
+    },
+    {
+      "tick": 1,
+      "cells": [
+        [
+          {"state": "engaged", "proposal": "excited", "reasoning": "The excitement around me is contagious."},
+          {"state": "excited", "proposal": "excited", "reasoning": "I'm already excited and want to spread it."},
+          {"state": "calm", "proposal": "engaged", "reasoning": "I see excitement nearby and feel drawn to it."},
+          {"state": "engaged", "proposal": "calm", "reasoning": "I value my autonomy and resist full excitement."},
+          {"state": "engaged", "proposal": "excited", "reasoning": "The energy is building in my region."}
+        ],
+        [
+          {"state": "engaged", "proposal": "excited", "reasoning": "I want to experience more excitement."},
+          {"state": "engaged", "proposal": "excited", "reasoning": "My neighbors are mostly engaged and excited."},
+          {"state": "excited", "proposal": "excited", "reasoning": "I reached peak excitement!"},
+          {"state": "calm", "proposal": "engaged", "reasoning": "I see the wave coming but stay reserved."},
+          {"state": "engaged", "proposal": "calm", "reasoning": "I resist the pressure to conform."}
+        ],
+        [
+          {"state": "calm", "proposal": "engaged", "reasoning": "Watching the excitement grow around me."},
+          {"state": "excited", "proposal": "excited", "reasoning": "The engagement converted me to excitement."},
+          {"state": "engaged", "proposal": "excited", "reasoning": "I want to join the excitement wave."},
+          {"state": "excited", "proposal": "calm", "reasoning": "I'm excited but think others should calm down."},
+          {"state": "engaged", "proposal": "engaged", "reasoning": "Maintaining my engaged state feels right."}
+        ],
+        [
+          {"state": "engaged", "proposal": "excited", "reasoning": "The wave is reaching me."},
+          {"state": "calm", "proposal": "calm", "reasoning": "I value my calm nature and resist change."},
+          {"state": "excited", "proposal": "excited", "reasoning": "The engagement around me pushed me to excitement."},
+          {"state": "engaged", "proposal": "excited", "reasoning": "Getting closer to excitement."},
+          {"state": "excited", "proposal": "engaged", "reasoning": "I'm excited but think moderation is key."}
+        ],
+        [
+          {"state": "excited", "proposal": "excited", "reasoning": "Already at peak, staying here."},
+          {"state": "engaged", "proposal": "excited", "reasoning": "Moving toward excitement."},
+          {"state": "calm", "proposal": "engaged", "reasoning": "Slowly warming up to the energy."},
+          {"state": "excited", "proposal": "engaged", "reasoning": "Excited but proposing balance."},
+          {"state": "engaged", "proposal": "excited", "reasoning": "The excitement is spreading to me."}
+        ]
+      ],
+      "globalStats": {"dormant": 0, "calm": 20, "engaged": 44, "excited": 36}
+    }
+  ],
+  "totalTicks": 2,
+  "totalLLMCalls": 25,
+  "estimatedCost": 0.0013,
+  "createdAt": "2025-02-07T10:30:00Z"
+}
