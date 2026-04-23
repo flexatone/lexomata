@@ -103,6 +103,8 @@ export default function RecordingPage() {
             runStats={{
               totalTicks: recording.totalTicks,
               totalLLMCalls: recording.totalLLMCalls,
+              totalInputTokens: recording.totalInputTokens ?? 0,
+              totalOutputTokens: recording.totalOutputTokens ?? 0,
               estimatedCost: recording.estimatedCost,
             }}
             history={recording.history}

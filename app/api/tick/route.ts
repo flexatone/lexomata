@@ -12,10 +12,10 @@ export async function POST(request: NextRequest) {
       tick: number
     }
 
-    const { grid: newGrid, llmCalls } = await processGrid(currentGrid, config)
+    const { grid: newGrid, llmCalls, inputTokens, outputTokens } = await processGrid(currentGrid, config)
     const snapshot = createSnapshot(newGrid, tick)
 
-    return NextResponse.json({ snapshot, llmCalls })
+    return NextResponse.json({ snapshot, llmCalls, inputTokens, outputTokens })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json({ error: message }, { status: 500 })

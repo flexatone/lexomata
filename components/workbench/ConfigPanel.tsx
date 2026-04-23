@@ -79,16 +79,6 @@ export default function ConfigPanel({ config, onChange, disabled }: Props) {
         </div>
       </div>
 
-      <div>
-        <label className="block font-medium text-zinc-700 dark:text-zinc-300 mb-1">Model</label>
-        <input
-          type="text"
-          value={config.llmModel}
-          onChange={e => onChange({ ...config, llmModel: e.target.value })}
-          disabled={disabled}
-          className="w-full rounded border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-3 py-1.5 disabled:opacity-50"
-        />
-      </div>
     </div>
   )
 }

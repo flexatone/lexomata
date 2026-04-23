@@ -15,7 +15,6 @@ export default function Stats({ snapshot, runStats, history }: Props) {
   if (!snapshot) return null
 
   const stats = snapshot.globalStats
-  const total = Object.values(stats).reduce((a, b) => a + b, 0) || 1
 
   return (
     <div className="space-y-4 text-sm">
@@ -50,9 +49,10 @@ export default function Stats({ snapshot, runStats, history }: Props) {
 
       {/* Run stats */}
       {runStats && (
-        <div className="flex gap-4 text-zinc-500 dark:text-zinc-400">
+        <div className="flex flex-wrap gap-4 text-zinc-500 dark:text-zinc-400">
           <span>Tick: {snapshot.tick}</span>
           <span>LLM calls: {runStats.totalLLMCalls}</span>
+          <span>Tokens: {(runStats.totalInputTokens + runStats.totalOutputTokens).toLocaleString()} ({runStats.totalInputTokens.toLocaleString()} in / {runStats.totalOutputTokens.toLocaleString()} out)</span>
           <span>~${runStats.estimatedCost.toFixed(4)}</span>
         </div>
       )}

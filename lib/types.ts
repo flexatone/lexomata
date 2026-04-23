@@ -16,6 +16,8 @@ export type SimulationConfig = {
   gridSize: number
   llmModel: string
   llmTemperature: number
+  inputCostPerMTok: number   // $/million input tokens
+  outputCostPerMTok: number  // $/million output tokens
   initialState: 'random' | 'center-excited' | 'all-calm' | 'custom'
   customInitialGrid?: CellState[][]
 }
@@ -28,6 +30,8 @@ export type Recording = {
   history: GridSnapshot[]
   totalTicks: number
   totalLLMCalls: number
+  totalInputTokens?: number
+  totalOutputTokens?: number
   estimatedCost: number
   createdAt: string
 }
@@ -37,6 +41,8 @@ export type RecordingMetadata = Omit<Recording, 'history'>
 export type RunStats = {
   totalTicks: number
   totalLLMCalls: number
+  totalInputTokens: number
+  totalOutputTokens: number
   estimatedCost: number
 }
 

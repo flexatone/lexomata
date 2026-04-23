@@ -18,25 +18,42 @@ function getClient() {
   return _client
 }
 
+export type CellResult = {
+  content: string
+  inputTokens: number
+  outputTokens: number
+}
+
 export async function queryCell(
   prompt: string,
   config: SimulationConfig
-): Promise<string> {
+): Promise<CellResult> {
   const response = await getClient().chat.completions.create({
     model: config.llmModel,
     temperature: config.llmTemperature,
     messages: [{ role: 'user', content: prompt }],
   })
-  return response.choices[0].message.content ?? ''
+  return {
+    content: response.choices[0].message.content ?? '',
+    inputTokens: response.usage?.prompt_tokens ?? 0,
+    outputTokens: response.usage?.completion_tokens ?? 0,
+  }
+}
+
+export type GridResult = {
+  grid: Cell[][]
+  llmCalls: number
+  inputTokens: number
+  outputTokens: number
 }
 
 export async function processGrid(
   grid: Cell[][],
   config: SimulationConfig,
-): Promise<{ grid: Cell[][], llmCalls: number }> {
+): Promise<GridResult> {
   const size = grid.length
   const globalStats = getGlobalStats(grid)
-  const promises: Promise<{ row: number; col: number; cell: Cell }>[] = []
+  const promises: Promise<{ row: number; col: number; cell: Cell; inputTokens: number; outputTokens: number }>[] = []
 
   for (let row = 0; row < size; row++) {
     for (let col = 0; col < size; col++) {
@@ -47,16 +64,19 @@ export async function processGrid(
 
       promises.push(
         queryCell(prompt, config)
-          .then(response => ({
+          .then(result => ({
             row,
             col,
-            cell: parseResponse(response),
+            cell: parseResponse(result.content),
+            inputTokens: result.inputTokens,
+            outputTokens: result.outputTokens,
           }))
           .catch(() => ({
-            // On failure, keep current state, propose calm
             row,
             col,
             cell: { state: cell.state, proposal: 'calm' as const, reasoning: 'LLM call failed, maintaining state.' },
+            inputTokens: 0,
+            outputTokens: 0,
           }))
       )
     }
@@ -64,10 +84,14 @@ export async function processGrid(
 
   const results = await Promise.all(promises)
   const newGrid: Cell[][] = Array.from({ length: size }, () => Array(size))
+  let inputTokens = 0
+  let outputTokens = 0
 
-  for (const { row, col, cell } of results) {
-    newGrid[row][col] = cell
+  for (const r of results) {
+    newGrid[r.row][r.col] = r.cell
+    inputTokens += r.inputTokens
+    outputTokens += r.outputTokens
   }
 
-  return { grid: newGrid, llmCalls: size * size }
+  return { grid: newGrid, llmCalls: size * size, inputTokens, outputTokens }
 }

@@ -10,8 +10,10 @@ import Stats from '@/components/shared/Stats'
 
 const DEFAULT_CONFIG: SimulationConfig = {
   gridSize: 5,
-  llmModel: 'gpt-4.1-nano',
+  llmModel: 'gpt-5.4-nano',
   llmTemperature: 0.7,
+  inputCostPerMTok: 0.20,
+  outputCostPerMTok: 1.25,
   initialState: 'random',
 }
 
@@ -21,7 +23,7 @@ export default function WorkbenchPage() {
   const [config, setConfig] = useState<SimulationConfig>(DEFAULT_CONFIG)
   const [snapshot, setSnapshot] = useState<GridSnapshot | null>(null)
   const [history, setHistory] = useState<GridSnapshot[]>([])
-  const [runStats, setRunStats] = useState<RunStats>({ totalTicks: 0, totalLLMCalls: 0, estimatedCost: 0 })
+  const [runStats, setRunStats] = useState<RunStats>({ totalTicks: 0, totalLLMCalls: 0, totalInputTokens: 0, totalOutputTokens: 0, estimatedCost: 0 })
   const [isRunning, setIsRunning] = useState(false)
   const [loading, setLoading] = useState(false)
   const [savedPath, setSavedPath] = useState<string | null>(null)
@@ -49,7 +51,7 @@ export default function WorkbenchPage() {
       if (data.error) throw new Error(data.error)
       setSnapshot(data.snapshot)
       setHistory([data.snapshot])
-      setRunStats({ totalTicks: 0, totalLLMCalls: 0, estimatedCost: 0 })
+      setRunStats({ totalTicks: 0, totalLLMCalls: 0, totalInputTokens: 0, totalOutputTokens: 0, estimatedCost: 0 })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Reset failed')
     }
@@ -70,10 +72,15 @@ export default function WorkbenchPage() {
       if (data.error) throw new Error(data.error)
       setSnapshot(data.snapshot)
       setHistory(prev => [...prev, data.snapshot])
+      const inTok = data.inputTokens ?? 0
+      const outTok = data.outputTokens ?? 0
+      const tickCost = (inTok * config.inputCostPerMTok + outTok * config.outputCostPerMTok) / 1_000_000
       setRunStats(prev => ({
         totalTicks: prev.totalTicks + 1,
         totalLLMCalls: prev.totalLLMCalls + (data.llmCalls ?? 0),
-        estimatedCost: prev.estimatedCost + (data.llmCalls ?? 0) * 0.00005,
+        totalInputTokens: prev.totalInputTokens + inTok,
+        totalOutputTokens: prev.totalOutputTokens + outTok,
+        estimatedCost: prev.estimatedCost + tickCost,
       }))
       return data.snapshot
     } catch (err) {
@@ -103,10 +110,15 @@ export default function WorkbenchPage() {
         current = data.snapshot
         setSnapshot(data.snapshot)
         setHistory(prev => [...prev, data.snapshot])
+        const inTok = data.inputTokens ?? 0
+        const outTok = data.outputTokens ?? 0
+        const tickCost = (inTok * config.inputCostPerMTok + outTok * config.outputCostPerMTok) / 1_000_000
         setRunStats(prev => ({
           totalTicks: prev.totalTicks + 1,
           totalLLMCalls: prev.totalLLMCalls + (data.llmCalls ?? 0),
-          estimatedCost: prev.estimatedCost + (data.llmCalls ?? 0) * 0.00005,
+          totalInputTokens: prev.totalInputTokens + inTok,
+          totalOutputTokens: prev.totalOutputTokens + outTok,
+          estimatedCost: prev.estimatedCost + tickCost,
         }))
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Tick failed')
