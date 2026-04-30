@@ -9,7 +9,7 @@ type Props = {
 }
 
 const GRID_SIZES = [5, 8, 10, 15, 20]
-const INITIAL_STATES: SimulationConfig['initialState'][] = ['random', 'center-excited', 'all-calm']
+const INITIAL_STATES: SimulationConfig['initialState'][] = ['random', 'uniform', 'gradient']
 
 export default function ConfigPanel({ config, onChange, disabled }: Props) {
   return (
@@ -56,6 +56,26 @@ export default function ConfigPanel({ config, onChange, disabled }: Props) {
         <div className="flex justify-between text-xs text-zinc-400">
           <span>0.0</span>
           <span>1.5</span>
+        </div>
+      </div>
+
+      <div>
+        <label className="block font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+          Think every: {config.thinkInterval ?? 20} ticks
+        </label>
+        <input
+          type="range"
+          min="4"
+          max="40"
+          step="4"
+          value={config.thinkInterval ?? 20}
+          onChange={e => onChange({ ...config, thinkInterval: parseInt(e.target.value) })}
+          disabled={disabled}
+          className="w-full"
+        />
+        <div className="flex justify-between text-xs text-zinc-400">
+          <span>4</span>
+          <span>40</span>
         </div>
       </div>
 

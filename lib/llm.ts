@@ -1,7 +1,7 @@
 import OpenAI from 'openai'
 import { shunt, SinkFile } from 'shuntly'
 import { Cell, SimulationConfig } from './types'
-import { getNeighbors, getRegionalStats, getGlobalStats, buildCellPrompt, parseResponse } from './simulation'
+import { getNeighbors, getRegionalStats, getGlobalStats, buildSystemPrompt, buildCellPrompt, parseResponse, computeMoods } from './simulation'
 
 let _client: ReturnType<typeof shunt<OpenAI>> | null = null
 
@@ -25,14 +25,19 @@ export type CellResult = {
 }
 
 export async function queryCell(
-  prompt: string,
-  config: SimulationConfig
+  systemPrompt: string,
+  userPrompt: string,
+  config: SimulationConfig,
+  signal?: AbortSignal
 ): Promise<CellResult> {
   const response = await getClient().chat.completions.create({
     model: config.llmModel,
     temperature: config.llmTemperature,
-    messages: [{ role: 'user', content: prompt }],
-  })
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ],
+  }, { signal })
   return {
     content: response.choices[0].message.content ?? '',
     inputTokens: response.usage?.prompt_tokens ?? 0,
@@ -53,6 +58,9 @@ export async function processGrid(
 ): Promise<GridResult> {
   const size = grid.length
   const globalStats = getGlobalStats(grid)
+  const systemPrompt = buildSystemPrompt()
+  const abort = new AbortController()
+
   const promises: Promise<{ row: number; col: number; cell: Cell; inputTokens: number; outputTokens: number }>[] = []
 
   for (let row = 0; row < size; row++) {
@@ -60,24 +68,21 @@ export async function processGrid(
       const cell = grid[row][col]
       const neighbors = getNeighbors(grid, row, col)
       const regionalStats = getRegionalStats(grid, row, col)
-      const prompt = buildCellPrompt(cell, neighbors, regionalStats, globalStats)
+      const userPrompt = buildCellPrompt(cell, neighbors, regionalStats, globalStats)
 
       promises.push(
-        queryCell(prompt, config)
+        queryCell(systemPrompt, userPrompt, config, abort.signal)
           .then(result => ({
             row,
             col,
-            cell: parseResponse(result.content),
+            cell: parseResponse(result.content, cell),
             inputTokens: result.inputTokens,
             outputTokens: result.outputTokens,
           }))
-          .catch(() => ({
-            row,
-            col,
-            cell: { state: cell.state, proposal: 'calm' as const, reasoning: 'LLM call failed, maintaining state.' },
-            inputTokens: 0,
-            outputTokens: 0,
-          }))
+          .catch(err => {
+            abort.abort()
+            throw err
+          })
       )
     }
   }
@@ -93,5 +98,5 @@ export async function processGrid(
     outputTokens += r.outputTokens
   }
 
-  return { grid: newGrid, llmCalls: size * size, inputTokens, outputTokens }
+  return { grid: computeMoods(newGrid), llmCalls: size * size, inputTokens, outputTokens }
 }

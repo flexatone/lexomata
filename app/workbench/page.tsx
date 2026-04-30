@@ -14,6 +14,7 @@ const DEFAULT_CONFIG: SimulationConfig = {
   llmTemperature: 0.7,
   inputCostPerMTok: 0.20,
   outputCostPerMTok: 1.25,
+  thinkInterval: 20,
   initialState: 'random',
 }
 
@@ -95,9 +96,11 @@ export default function WorkbenchPage() {
     runRef.current = true
     setIsRunning(true)
 
+    const MIN_TICK_MS = 400
     let current = snapshot
     while (runRef.current && current && current.tick < 999) {
       const tick = current.tick + 1
+      const t0 = performance.now()
       try {
         const res = await fetch('/api/tick', {
           method: 'POST',
@@ -120,6 +123,10 @@ export default function WorkbenchPage() {
           totalOutputTokens: prev.totalOutputTokens + outTok,
           estimatedCost: prev.estimatedCost + tickCost,
         }))
+        const elapsed = performance.now() - t0
+        if (elapsed < MIN_TICK_MS) {
+          await new Promise(r => setTimeout(r, MIN_TICK_MS - elapsed))
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Tick failed')
         break

@@ -1,7 +1,6 @@
 'use client'
 
 import { GridSnapshot } from '@/lib/types'
-import { STATE_COLORS } from '@/lib/colors'
 
 type Props = {
   history: GridSnapshot[]
@@ -26,14 +25,13 @@ export default function Timeline({ history, currentTick, onSeek }: Props) {
         className="w-full"
       />
 
-      {/* Excitement sparkline */}
+      {/* Phase coherence sparkline */}
       <svg viewBox={`0 0 ${history.length} 50`} className="h-8 w-full" preserveAspectRatio="none">
-        {/* Sparkline */}
         <polyline
           fill="none"
-          stroke={STATE_COLORS.excited}
+          stroke="#3b82f6"
           strokeWidth="1"
-          points={history.map((snap, i) => `${i},${50 - (snap.globalStats.excited ?? 0) * 0.5}`).join(' ')}
+          points={history.map((snap, i) => `${i},${50 - (snap.globalStats.avgPhaseCoherence ?? 0) * 50}`).join(' ')}
         />
         {/* Current position indicator */}
         <line

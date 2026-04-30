@@ -1,10 +1,13 @@
 {
   "title": "Example Waves",
-  "description": "A small 5x5 demo showing wave-like patterns emerging from a random initial state",
+  "description": "A small 5x5 demo showing wave-like patterns emerging as cells converge on shared compositions with phase offsets",
   "config": {
     "gridSize": 5,
-    "llmModel": "gpt-4.1-nano",
+    "llmModel": "gpt-5.4-nano",
     "llmTemperature": 0.7,
+    "inputCostPerMTok": 0.20,
+    "outputCostPerMTok": 1.25,
+    "thinkInterval": 20,
     "initialState": "random"
   },
   "history": [
@@ -12,87 +15,145 @@
       "tick": 0,
       "cells": [
         [
-          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "excited", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "dormant", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."}
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 0, "colorIndex": 0, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 1, "colorIndex": 1, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "dormant", "composition": [0,1,2,3,4,5,6,7], "phase": 2, "colorIndex": 2, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "calm", "composition": [1,3,5,7], "phase": 0, "colorIndex": 1, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "excited", "composition": [1,3,5,7], "phase": 1, "colorIndex": 3, "reasoning": "Initial state.", "compositionAge": 0}
         ],
         [
-          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "excited", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "dormant", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."}
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 1, "colorIndex": 1, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 2, "colorIndex": 2, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "excited", "composition": [0,1,2,3,4,5,6,7], "phase": 3, "colorIndex": 3, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "calm", "composition": [1,3,5,7], "phase": 2, "colorIndex": 5, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "engaged", "composition": [1,3,5,7], "phase": 3, "colorIndex": 7, "reasoning": "Initial state.", "compositionAge": 0}
         ],
         [
-          {"state": "dormant", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "excited", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."}
+          {"state": "dormant", "composition": [0,1,2,3,4,5,6,7], "phase": 2, "colorIndex": 2, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 3, "colorIndex": 3, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 4, "colorIndex": 4, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "calm", "composition": [2,5,7], "phase": 0, "colorIndex": 2, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "dormant", "composition": [2,5,7], "phase": 1, "colorIndex": 5, "reasoning": "Initial state.", "compositionAge": 0}
         ],
         [
-          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "dormant", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "excited", "proposal": "calm", "reasoning": "Initial state."}
+          {"state": "calm", "composition": [3,1,6,0], "phase": 0, "colorIndex": 3, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "excited", "composition": [3,1,6,0], "phase": 1, "colorIndex": 1, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "calm", "composition": [2,5,7], "phase": 2, "colorIndex": 7, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "engaged", "composition": [2,5,7], "phase": 0, "colorIndex": 2, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "calm", "composition": [2,5,7], "phase": 1, "colorIndex": 5, "reasoning": "Initial state.", "compositionAge": 0}
         ],
         [
-          {"state": "excited", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "dormant", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "engaged", "proposal": "calm", "reasoning": "Initial state."},
-          {"state": "calm", "proposal": "calm", "reasoning": "Initial state."}
+          {"state": "engaged", "composition": [3,1,6,0], "phase": 2, "colorIndex": 6, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "calm", "composition": [3,1,6,0], "phase": 3, "colorIndex": 0, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "dormant", "composition": [2,5,7], "phase": 1, "colorIndex": 5, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "calm", "composition": [2,5,7], "phase": 2, "colorIndex": 7, "reasoning": "Initial state.", "compositionAge": 0},
+          {"state": "excited", "composition": [0,4,7], "phase": 0, "colorIndex": 0, "reasoning": "Initial state.", "compositionAge": 0}
         ]
       ],
-      "globalStats": {"dormant": 16, "calm": 40, "engaged": 24, "excited": 20}
+      "globalStats": {
+        "stateDistribution": {"dormant": 16, "calm": 40, "engaged": 24, "excited": 12},
+        "colorDistribution": {"0": 16, "1": 16, "2": 16, "3": 16, "4": 4, "5": 16, "6": 4, "7": 12},
+        "compositionClusters": 5,
+        "avgPhaseCoherence": 0.45
+      }
     },
     {
       "tick": 1,
       "cells": [
         [
-          {"state": "engaged", "proposal": "excited", "reasoning": "The excitement around me is contagious."},
-          {"state": "excited", "proposal": "excited", "reasoning": "I'm already excited and want to spread it."},
-          {"state": "calm", "proposal": "engaged", "reasoning": "I see excitement nearby and feel drawn to it."},
-          {"state": "engaged", "proposal": "calm", "reasoning": "I value my autonomy and resist full excitement."},
-          {"state": "engaged", "proposal": "excited", "reasoning": "The energy is building in my region."}
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 1, "colorIndex": 1, "reasoning": "Advancing to stay in sync with wave.", "compositionAge": 0},
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 2, "colorIndex": 2, "reasoning": "Phase advancing naturally.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 3, "colorIndex": 3, "reasoning": "Joining dominant composition.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 4, "colorIndex": 4, "reasoning": "Adopting neighbor composition for wave.", "compositionAge": 0},
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 5, "colorIndex": 5, "reasoning": "Joining the wave.", "compositionAge": 0}
         ],
         [
-          {"state": "engaged", "proposal": "excited", "reasoning": "I want to experience more excitement."},
-          {"state": "engaged", "proposal": "excited", "reasoning": "My neighbors are mostly engaged and excited."},
-          {"state": "excited", "proposal": "excited", "reasoning": "I reached peak excitement!"},
-          {"state": "calm", "proposal": "engaged", "reasoning": "I see the wave coming but stay reserved."},
-          {"state": "engaged", "proposal": "calm", "reasoning": "I resist the pressure to conform."}
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 2, "colorIndex": 2, "reasoning": "Wave propagation.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 3, "colorIndex": 3, "reasoning": "Staying in wave.", "compositionAge": 0},
+          {"state": "excited", "composition": [0,1,2,3,4,5,6,7], "phase": 4, "colorIndex": 4, "reasoning": "Excited about convergence.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 5, "colorIndex": 5, "reasoning": "Joining the dominant composition.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 6, "colorIndex": 6, "reasoning": "Joining the wave.", "compositionAge": 0}
         ],
         [
-          {"state": "calm", "proposal": "engaged", "reasoning": "Watching the excitement grow around me."},
-          {"state": "excited", "proposal": "excited", "reasoning": "The engagement converted me to excitement."},
-          {"state": "engaged", "proposal": "excited", "reasoning": "I want to join the excitement wave."},
-          {"state": "excited", "proposal": "calm", "reasoning": "I'm excited but think others should calm down."},
-          {"state": "engaged", "proposal": "engaged", "reasoning": "Maintaining my engaged state feels right."}
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 3, "colorIndex": 3, "reasoning": "Wave continues.", "compositionAge": 0},
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 4, "colorIndex": 4, "reasoning": "Pattern emerging.", "compositionAge": 0},
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 5, "colorIndex": 5, "reasoning": "Smooth gradient.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 6, "colorIndex": 6, "reasoning": "Joining the wave.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 7, "colorIndex": 7, "reasoning": "Full spectrum.", "compositionAge": 0}
         ],
         [
-          {"state": "engaged", "proposal": "excited", "reasoning": "The wave is reaching me."},
-          {"state": "calm", "proposal": "calm", "reasoning": "I value my calm nature and resist change."},
-          {"state": "excited", "proposal": "excited", "reasoning": "The engagement around me pushed me to excitement."},
-          {"state": "engaged", "proposal": "excited", "reasoning": "Getting closer to excitement."},
-          {"state": "excited", "proposal": "engaged", "reasoning": "I'm excited but think moderation is key."}
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 4, "colorIndex": 4, "reasoning": "Adopting dominant composition.", "compositionAge": 0},
+          {"state": "excited", "composition": [0,1,2,3,4,5,6,7], "phase": 5, "colorIndex": 5, "reasoning": "Joining the wave!", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 6, "colorIndex": 6, "reasoning": "Wave expanding.", "compositionAge": 0},
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 7, "colorIndex": 7, "reasoning": "Joining the majority.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 0, "colorIndex": 0, "reasoning": "Wrapping around.", "compositionAge": 0}
         ],
         [
-          {"state": "excited", "proposal": "excited", "reasoning": "Already at peak, staying here."},
-          {"state": "engaged", "proposal": "excited", "reasoning": "Moving toward excitement."},
-          {"state": "calm", "proposal": "engaged", "reasoning": "Slowly warming up to the energy."},
-          {"state": "excited", "proposal": "engaged", "reasoning": "Excited but proposing balance."},
-          {"state": "engaged", "proposal": "excited", "reasoning": "The excitement is spreading to me."}
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 5, "colorIndex": 5, "reasoning": "Adopting dominant composition.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 6, "colorIndex": 6, "reasoning": "Wave reaches the edge.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 7, "colorIndex": 7, "reasoning": "Joining wave pattern.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 0, "colorIndex": 0, "reasoning": "Beautiful gradient forming.", "compositionAge": 0},
+          {"state": "excited", "composition": [0,1,2,3,4,5,6,7], "phase": 1, "colorIndex": 1, "reasoning": "Complete wave convergence!", "compositionAge": 0}
         ]
       ],
-      "globalStats": {"dormant": 0, "calm": 20, "engaged": 44, "excited": 36}
+      "globalStats": {
+        "stateDistribution": {"dormant": 0, "calm": 56, "engaged": 24, "excited": 12},
+        "colorDistribution": {"0": 12, "1": 8, "2": 12, "3": 12, "4": 16, "5": 16, "6": 12, "7": 12},
+        "compositionClusters": 1,
+        "avgPhaseCoherence": 0.85
+      }
+    },
+    {
+      "tick": 2,
+      "cells": [
+        [
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 2, "colorIndex": 2, "reasoning": "Steady wave advancement.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 3, "colorIndex": 3, "reasoning": "Phase advancing.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 4, "colorIndex": 4, "reasoning": "Smooth wave.", "compositionAge": 0},
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 5, "colorIndex": 5, "reasoning": "Full convergence.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 6, "colorIndex": 6, "reasoning": "Gradient continues.", "compositionAge": 0}
+        ],
+        [
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 3, "colorIndex": 3, "reasoning": "Wave propagating.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 4, "colorIndex": 4, "reasoning": "Steady cycle.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 5, "colorIndex": 5, "reasoning": "Beautiful pattern.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 6, "colorIndex": 6, "reasoning": "Smooth.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 7, "colorIndex": 7, "reasoning": "Edge of spectrum.", "compositionAge": 0}
+        ],
+        [
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 4, "colorIndex": 4, "reasoning": "Wave continues.", "compositionAge": 0},
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 5, "colorIndex": 5, "reasoning": "Phase wrap.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 6, "colorIndex": 6, "reasoning": "Steady state.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 7, "colorIndex": 7, "reasoning": "Gradient looks great.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 0, "colorIndex": 0, "reasoning": "Wrapped around.", "compositionAge": 0}
+        ],
+        [
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 5, "colorIndex": 5, "reasoning": "Full convergence achieved.", "compositionAge": 0},
+          {"state": "excited", "composition": [0,1,2,3,4,5,6,7], "phase": 6, "colorIndex": 6, "reasoning": "Excited about the pattern!", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 7, "colorIndex": 7, "reasoning": "Wave expanding.", "compositionAge": 0},
+          {"state": "engaged", "composition": [0,1,2,3,4,5,6,7], "phase": 0, "colorIndex": 0, "reasoning": "Strong coherence.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 1, "colorIndex": 1, "reasoning": "All aligned now.", "compositionAge": 0}
+        ],
+        [
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 6, "colorIndex": 6, "reasoning": "Wave wraps around edges.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 7, "colorIndex": 7, "reasoning": "Smooth gradient.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 0, "colorIndex": 0, "reasoning": "Pattern complete.", "compositionAge": 0},
+          {"state": "calm", "composition": [0,1,2,3,4,5,6,7], "phase": 1, "colorIndex": 1, "reasoning": "Full convergence.", "compositionAge": 0},
+          {"state": "excited", "composition": [0,1,2,3,4,5,6,7], "phase": 2, "colorIndex": 2, "reasoning": "Perfect wave achieved!", "compositionAge": 0}
+        ]
+      ],
+      "globalStats": {
+        "stateDistribution": {"dormant": 0, "calm": 72, "engaged": 16, "excited": 12},
+        "colorDistribution": {"0": 12, "1": 8, "2": 12, "3": 12, "4": 12, "5": 16, "6": 16, "7": 12},
+        "compositionClusters": 1,
+        "avgPhaseCoherence": 0.95
+      }
     }
   ],
-  "totalTicks": 2,
-  "totalLLMCalls": 25,
-  "estimatedCost": 0.0013,
-  "createdAt": "2025-02-07T10:30:00Z"
+  "totalTicks": 3,
+  "totalLLMCalls": 75,
+  "totalInputTokens": 15000,
+  "totalOutputTokens": 3000,
+  "estimatedCost": 0.0068,
+  "createdAt": "2025-01-15T12:00:00.000Z"
 }

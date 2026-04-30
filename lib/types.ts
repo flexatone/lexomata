@@ -1,25 +1,53 @@
 export type CellState = 'dormant' | 'calm' | 'engaged' | 'excited'
 
+export type Composition = number[] // 2-10 elements, each 0-7
+
 export type Cell = {
   state: CellState
-  proposal: CellState
+  composition: Composition
+  phase: number
+  colorIndex: number
   reasoning: string
+  compositionAge: number
+}
+
+export type NeighborInfo = {
+  direction: Direction
+  state: CellState
+  composition: Composition
+  phase: number
+  colorIndex: number
+}
+
+export type RegionalStats = {
+  dominantComposition: Composition
+  sameCompCount: number
+  totalCount: number
+  avgPhaseDiff: number
+}
+
+export type GlobalStats = {
+  stateDistribution: Record<CellState, number>
+  colorDistribution: Record<number, number> // palette index -> percentage
+  compositionClusters: number
+  avgPhaseCoherence: number
 }
 
 export type GridSnapshot = {
   tick: number
   cells: Cell[][]
-  globalStats: Record<CellState, number>
+  globalStats: GlobalStats
 }
 
 export type SimulationConfig = {
   gridSize: number
   llmModel: string
   llmTemperature: number
-  inputCostPerMTok: number   // $/million input tokens
-  outputCostPerMTok: number  // $/million output tokens
-  initialState: 'random' | 'center-excited' | 'all-calm' | 'custom'
-  customInitialGrid?: CellState[][]
+  inputCostPerMTok: number
+  outputCostPerMTok: number
+  thinkInterval: number
+  initialState: 'random' | 'uniform' | 'gradient' | 'custom'
+  customInitialGrid?: Cell[][]
 }
 
 export type Recording = {
@@ -47,9 +75,3 @@ export type RunStats = {
 }
 
 export type Direction = 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'NW'
-
-export type NeighborInfo = {
-  direction: Direction
-  state: CellState
-  proposal: CellState
-}
